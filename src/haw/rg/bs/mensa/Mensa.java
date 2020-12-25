@@ -1,5 +1,6 @@
-package haw.hamburg.rg.bs.mensa;
+package haw.rg.bs.mensa;
 
+import haw.rg.util.Timer;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Mensa {
@@ -10,6 +11,7 @@ public class Mensa {
     private final ReentrantLock checkoutPicker = new ReentrantLock();
     private Checkout[] checkouts;
     private Student[] students;
+    private final Timer timer;
 
 
     public static void main(String[] args) {
@@ -20,7 +22,9 @@ public class Mensa {
                 c = Integer.parseInt(args[0]);
                 s = Integer.parseInt(args[1]);
             }
-            catch (NumberFormatException e) {}
+            catch (NumberFormatException e) {
+                System.err.println("Faulty arguments. Continuing with default values.");
+            }
         }
 
         new Mensa(c, s).start();
@@ -29,17 +33,19 @@ public class Mensa {
     public Mensa(int checkouts, int students) {
         this.checkouts = new Checkout[checkouts];
         this.students = new Student[students];
+        timer = new Timer();
     }
 
-    private void start() {
-        System.err.println("Setting up " + checkouts.length + " checkouts for " + students.length + " students.\nEnjoy your meal.");
+    public void start() {
+        timer.start();
+        System.err.println(timer.time() + "| " + "Setting up " + checkouts.length + " checkouts for " + students.length + " students.\nEnjoy your meal.");
         System.err.println("======================================================");
 
         for (int i = 0; i < checkouts.length; i++) {
-            checkouts[i] = new Checkout(i);
+            checkouts[i] = new Checkout(i, timer);
         }
         for (int i = 0; i < students.length; i++) {
-            students[i] = new Student(i, checkouts, checkoutPicker);
+            students[i] = new Student(i, checkouts, checkoutPicker, timer);
             students[i].start();
         }
         try {

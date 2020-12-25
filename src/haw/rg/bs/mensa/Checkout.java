@@ -1,24 +1,25 @@
-package haw.hamburg.rg.bs.mensa;
+package haw.rg.bs.mensa;
 
+import haw.rg.util.Timer;
 import java.util.concurrent.locks.ReentrantLock;
-// TODO: Siehe BoundedBufferServer
+
 public class Checkout implements Comparable {
     private int number;
     private int queueLength = 0;
     private ReentrantLock mutex = new ReentrantLock();
+    private Timer timer;
 
-    Checkout(int number) {
+    Checkout(int number, Timer timer) {
         this.number = number;
+        this.timer = timer;
     }
 
     void pay() throws InterruptedException {
-
         mutex.lockInterruptibly();
-        System.err.println("-- Checkout " + number + " processing student " + Thread.currentThread().getName());
+        System.err.println(timer.time() + "| " +"-- Checkout " + number + " processing student " + Thread.currentThread().getName());
         Thread.sleep(3000);
-        mutex.unlock();
-
         queueLength--;
+        mutex.unlock();
     }
 
     String getName() {
@@ -31,11 +32,8 @@ public class Checkout implements Comparable {
         return Integer.compare(this.queueLength, other.queueLength);
     }
 
-    void queueUp(String name) throws InterruptedException{
-        mutex.lockInterruptibly();
+    void queueUp() {
         queueLength++;
-        System.err.println("---- Checkout " + number + " queue is now " + queueLength + " (" + name + " queued up) | " + mutex.getHoldCount());
-        mutex.unlock();
     }
 
     int getQueueLength() {
