@@ -7,7 +7,7 @@ package haw.rg.bs.lounge;
  */
 public class Smoker extends Thread {
 
-    private Ingredients ingredient;
+    private final Ingredients ingredient;
     private Table<Ingredients> table;
 
     /**

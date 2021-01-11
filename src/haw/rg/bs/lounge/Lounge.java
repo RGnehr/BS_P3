@@ -37,9 +37,9 @@ public class Lounge {
             participants[i].start();
         }
 
-        // create agents
+        // create smokers
         for (int i = 0; i < DEFAULT_SMOKER; i++) {
-            participants[DEFAULT_AGENTS + i] = new Smoker(Ingredients.values()[i], table);
+            participants[DEFAULT_AGENTS + i] = new Smoker(Ingredients.fromOrdinal(i), table);
             participants[DEFAULT_AGENTS + i].start();
         }
 

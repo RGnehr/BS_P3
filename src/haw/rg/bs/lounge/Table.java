@@ -73,7 +73,7 @@ public class Table<E extends Ingredients> {
      */
     private boolean hasMissingIngredient() {
         try {
-            // Wenn cast fehlschlägt, ist Thread kein Smmoker
+            // Wenn cast fehlschlägt, ist Thread kein Smoker
             Smoker smoker = (Smoker) Thread.currentThread();
 
             // Wenn mitgebrachte Zutat bereits auf dem Tisch liegt, darf der Smoker nicht zugreifen
